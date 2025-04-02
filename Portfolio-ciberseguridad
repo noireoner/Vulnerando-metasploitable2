@@ -1,7 +1,6 @@
 # Vulnerando-metasploitable2
 Vulnerando maquina metasploitable2 con msfconsole hacia los puertos 21,445 y sus vulnerabilidades .
 
-[Vulnerando-metasploitable2-informe.pdf](https://github.com/user-attachments/files/19570085/Vulnerando-metasploitable2-informe.pdf)
 
 🛡️ Informe Ejecutivo de Seguridad: Explotación de Metasploitable2 🛠️
 Objetivo: Realizar una auditoría de seguridad sobre la máquina Metasploitable2 a través de los puertos 21 (FTP) y 445 (SMB), identificando las vulnerabilidades y explotándolas para obtener acceso remoto. Además, se detallan las medidas para mitigar los riesgos detectados.
